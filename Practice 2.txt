@@ -1,0 +1,34 @@
+using System;
+using System.Threading;
+
+class Program
+{
+    static void ProcessData(int[] data, int start, int end, string threadName)
+    {
+        for (int i = start; i < end; i++)
+        {
+            Console.WriteLine($"{threadName} processed value: {data[i]}");
+            Thread.Sleep(10);
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        int[] data = new int[100];
+        for (int i = 0; i < data.Length; i++)
+        {
+            data[i] = i + 1;
+        }
+
+        Thread thread1 = new Thread(() => ProcessData(data, 0, data.Length / 2, "Thread 1"));
+        Thread thread2 = new Thread(() => ProcessData(data, data.Length / 2, data.Length, "Thread 2"));
+
+        thread1.Start();
+        thread2.Start();
+
+        thread1.Join();
+        thread2.Join(); 
+
+        Console.WriteLine("Main thread finished.");
+    }
+}
